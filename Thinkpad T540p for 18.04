@@ -1,0 +1,35 @@
+Just create a file at /usr/share/X11/xorg.conf.d/90-clickpad.conf with the following contents above:
+
+
+Section "InputClass"
+    Identifier "Clickpad"
+    MatchIsTouchpad "on"
+    MatchDevicePath "/dev/input/event*"
+    Driver "evdev"
+    # Synaptics options come here.
+    Option "Clickpad" "true"
+    option "EmulatedMidButtonTime" "0"
+    Option "SoftButtonAreas" "65% 0 0 40% 42% 65% 0 40%"
+    Option "AreaBottomEdge" "0%"
+EndSection
+
+Section "InputClass"
+    Identifier   "TrackPoint"
+    MatchProduct "TrackPoint"
+    MatchDriver  "evdev"
+    Option       "EmulateWheel"       "1"
+    Option       "EmulateWheelButton" "2"
+    Option       "XAxisMapping"       "6 7"
+EndSection
+
+
+
+Next step we need to make trackpoint to behave in flat mode.
+KDE only: Change mouse acceleration settings to flat in advanced mouse settings.
+For other DE:
+Create a file at /etc/X11/xorg.conf.d/50-mouse-acceleration.conf with the following contents below:
+
+Section "InputClass" Identifier "evdev pointer catchall" MatchIsPointer "on" Driver "evdev" EndSection
+
+
+This uses evdev driver for the trackpoint and gives you the option to set constant deceleration factor with xinput.
